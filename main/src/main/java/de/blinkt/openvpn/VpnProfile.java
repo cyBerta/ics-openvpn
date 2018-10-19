@@ -4,6 +4,7 @@
  */
 
 package de.blinkt.openvpn;
+import se.leap.bitmaskclient.BuildConfig;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

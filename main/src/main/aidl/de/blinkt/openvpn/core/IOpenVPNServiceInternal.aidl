@@ -21,7 +21,6 @@ interface IOpenVPNServiceInternal {
      */
     boolean stopVPN(boolean replaceConnection);
 
-    void addAllowedExternalApp(String packagename);
+    boolean isVpnRunning();
 
-    boolean isAllowedExternalApp(String packagename);
 }
