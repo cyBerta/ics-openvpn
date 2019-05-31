@@ -120,10 +120,10 @@ android {
     flavorDimensions("implementation")
 
     productFlavors {
-        /*create("noovpn3") {
+        create("noovpn3") {
             setDimension("implementation")
             buildConfigField ("boolean", "openvpn3", "false")
-        }*/
+        }
         create("normal") {
             setDimension("implementation")
             buildConfigField ("boolean", "openvpn3", "true")
