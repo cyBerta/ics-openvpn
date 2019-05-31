@@ -40,9 +40,9 @@ dependencies {
 
 
 
-val openvpn3SwigFiles = File(buildDir, "generated/source/ovpn3swig/ovpn3")
+//val openvpn3SwigFiles = File(buildDir, "generated/source/ovpn3swig/ovpn3")
 
-tasks.register<Exec>("generateOpenVPN3Swig")
+/*tasks.register<Exec>("generateOpenVPN3Swig")
 {
     var swigcmd = "swig"
     // Workaround for Mac OS X since it otherwise does not find swig and I cannot get
@@ -57,7 +57,7 @@ tasks.register<Exec>("generateOpenVPN3Swig")
             "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
             "-o", "${openvpn3SwigFiles}/ovpncli_wrap.cxx", "-oh", "${openvpn3SwigFiles}/ovpncli_wrap.h",
             "src/main/cpp/openvpn3/javacli/ovpncli.i"))
-}
+}*/
 
 android {
     compileSdkVersion(28)
@@ -88,9 +88,9 @@ android {
             assets.srcDirs("src/main/assets", "build/ovpnassets")
         }
 
-        create("normal") {
+       /* create("normal") {
            java.srcDirs("src/ovpn3/java/", openvpn3SwigFiles)
-        }
+        }*/
 
         getByName("debug") {
 
@@ -155,14 +155,14 @@ if (project.hasProperty("keystoreFile") &&
 
 /* Hack-o-rama but it works good enough and documentation is surprisingly sparse */
 
-val swigTask = tasks.named("generateOpenVPN3Swig")
-val preBuildTask = tasks.getByName("preBuild")
-val assembleTask = tasks.getByName("assemble")
+//val swigTask = tasks.named("generateOpenVPN3Swig")
+//val preBuildTask = tasks.getByName("preBuild")
+//val assembleTask = tasks.getByName("assemble")
 
 println(tasks.names)
 
-assembleTask.dependsOn(swigTask)
-preBuildTask.dependsOn(swigTask)
+//assembleTask.dependsOn(swigTask)
+//preBuildTask.dependsOn(swigTask)
 
 // Ensure native build is run before assets, so assets are ready to be merged into the apk
 /*android.applicationVariants.all { variant ->
