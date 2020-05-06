@@ -16,8 +16,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.security.KeyChain;
 import android.security.KeyChainException;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -345,6 +345,7 @@ public class VpnProfile implements Serializable, Cloneable {
             cfg.append("management-hold\n\n");
 
             cfg.append(String.format("setenv IV_GUI_VER %s \n", openVpnEscape(getVersionEnvString(context))));
+            cfg.append("setenv IV_SSO openurl,crtext\n");
             String versionString = getPlatformVersionEnvString();
             cfg.append(String.format("setenv IV_PLAT_VER %s\n", openVpnEscape(versionString)));
         } else {
@@ -1165,7 +1166,7 @@ public class VpnProfile implements Serializable, Cloneable {
         // The Jelly Bean *evil* Hack
         // 4.2 implements the RSA/ECB/PKCS1PADDING in the OpenSSLprovider
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            return processSignJellyBeans(privkey, data);
+            return processSignJellyBeans(privkey, data, pkcs1padding);
         }
 
 
@@ -1204,7 +1205,7 @@ public class VpnProfile implements Serializable, Cloneable {
         }
     }
 
-    private byte[] processSignJellyBeans(PrivateKey privkey, byte[] data) {
+    private byte[] processSignJellyBeans(PrivateKey privkey, byte[] data, boolean pkcs1padding) {
         try {
             Method getKey = privkey.getClass().getSuperclass().getDeclaredMethod("getOpenSSLKey");
             getKey.setAccessible(true);
@@ -1222,7 +1223,7 @@ public class VpnProfile implements Serializable, Cloneable {
             getPkeyContext.setAccessible(false);
 
             // 112 with TLS 1.2 (172 back with 4.3), 36 with TLS 1.0
-            return NativeUtils.rsasign(data, pkey);
+            return NativeUtils.rsasign(data, pkey, pkcs1padding);
 
         } catch (NoSuchMethodException | InvalidKeyException | InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
             VpnStatus.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
